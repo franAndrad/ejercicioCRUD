@@ -7,7 +7,11 @@ let descripcion = document.querySelector("#descripcion");
 let imagen = document.querySelector("#imagen");
 let genero = document.querySelector("#genero");
 let formulario = document.querySelector("#formSerie");
-let listasSeries=[];
+const modalAdminSerie = new bootstrap.Modal(document.querySelector('#modalSerie'));
+console.log(modalAdminSerie);
+
+// si hay algo en local storage traer los datos, si no hay nada listaSeries tiene que ser una []
+let listasSeries = JSON.parse(localStorage.getItem('listaSeriesKey')) || []; //con JSON.parse el formato legible para js
 
 // agregar validaciones a cada campo
 
@@ -24,8 +28,20 @@ function crearSerie(e){
     console.log(listasSeries);
     // limpiar el formulario
     limpiarFormulario();
+    // guardar la lista de series en local storage
+    guardarListaSeries();
+    // cerrar modal que administra series
+    
+    
 }
 
 function limpiarFormulario(){
     formulario.reset();
+    // si usamos is-valid o is-invalid hay que reseterlas
+    console.log();
 }
+
+function guardarListaSeries(){
+    localStorage.setItem('listaSeriesKey',JSON.stringify(listasSeries)); //JSON.stringify convierte en formato JSON
+}
+
