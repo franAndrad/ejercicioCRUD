@@ -86,7 +86,10 @@ function crearSerie(e){
 function limpiarFormulario(){
     formulario.reset();
     // si usamos is-valid o is-invalid hay que reseterlas
-    console.log();
+    titulo.className = 'form-control';
+    descripcion.className = 'form-control';
+    imagen.className = 'form-control';
+    genero.className = 'form-control';
 }
 
 function guardarListaSeries(){
