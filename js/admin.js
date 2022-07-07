@@ -23,6 +23,9 @@ btnCrearSerie.addEventListener('click', ()=>{
     modalAdminSerie.show();
 }); //abrimos ventana modal
 
+// verificar si hay datos para dibujar la tabla
+cargaInicial();
+
 function crearSerie(e){
     e.preventDefault();
     console.log("Desde crear serie");
@@ -44,6 +47,7 @@ function crearSerie(e){
         'La serie cargada se creo correctamente',
         'success'
     );
+    crearFila(nuevaSerie);
 }
 
 function limpiarFormulario(){
@@ -56,3 +60,28 @@ function guardarListaSeries(){
     localStorage.setItem('listaSeriesKey',JSON.stringify(listasSeries)); //JSON.stringify convierte en formato JSON
 }
 
+function cargaInicial(){
+    if(listasSeries.length > 0){
+        // dibujar la tabla
+        listasSeries.forEach((itemSerie)=>{   //con el forEach le ponemos un nombre (aca) y ese representa a cada uno de los elementos del arreglo
+            crearFila(itemSerie);
+        });
+    }
+}
+
+function crearFila(itemSerie){
+    let tablaSeries = document.querySelector("#listaSeries");
+    tablaSeries.innerHTML += `
+    <tr>
+        <th scope="row">${itemSerie.codigo}</th>
+        <td>${itemSerie.titulo}</td>
+        <td>${itemSerie.descripcion}</td>
+        <td>${itemSerie.imagen}</td>
+        <td>${itemSerie.genero}</td>
+        <td>
+            <button class="btn btn-warning"><i class="bi bi-x-square"></i></button>
+            <button class="btn btn-danger"><i class="bi bi-pencil-square"></i></button>
+        </td>
+    </tr>
+    `;
+}
