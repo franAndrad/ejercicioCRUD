@@ -1,4 +1,5 @@
 import { Serie } from "./serieClass.js";
+import {generarToken} from "./token.js"
 
 // traemos los elementos del html
 let codigo = document.querySelector("#codigo");
@@ -7,7 +8,8 @@ let descripcion = document.querySelector("#descripcion");
 let imagen = document.querySelector("#imagen");
 let genero = document.querySelector("#genero");
 let formulario = document.querySelector("#formSerie");
-let btnCrearSerie = document.querySelector("#btnCrearSerie")
+let btnCrearSerie = document.querySelector("#btnCrearSerie");
+let token = [];
 
 const modalAdminSerie = new bootstrap.Modal(document.querySelector('#modalSerie'));
 console.log(modalAdminSerie);
@@ -19,7 +21,15 @@ let listasSeries = JSON.parse(localStorage.getItem('listaSeriesKey')) || []; //c
 
 formulario.addEventListener('submit',crearSerie);
 btnCrearSerie.addEventListener('click', ()=>{
+    // limpiamos el formulario
     limpiarFormulario();
+    
+    // Ponemos el token generado
+    generarToken(token,3);
+    codigo.value = token[token.length-1];
+    codigo.disabled = true;
+    
+    // mostramos la ventana modal
     modalAdminSerie.show();
 }); //abrimos ventana modal
 
