@@ -108,7 +108,11 @@ function crearFila(itemSerie){
     <tr>
         <th scope="row">${itemSerie.codigo}</th>
         <td>${itemSerie.titulo}</td>
-        <td>${itemSerie.descripcion}</td>
+        <td>
+            <div class = 'textOverflow'>
+                ${itemSerie.descripcion}
+            <div>
+        </td>
         <td>${itemSerie.imagen}</td>
         <td>${itemSerie.genero}</td>
         <td>
