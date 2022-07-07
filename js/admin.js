@@ -38,7 +38,12 @@ function crearSerie(e){
     guardarListaSeries();
     // cerrar modal que administra series
     modalAdminSerie.hide();
-    
+    // mostrar mensaje
+    Swal.fire(
+        'Serie creada!',
+        'La serie cargada se creo correctamente',
+        'success'
+    );
 }
 
 function limpiarFormulario(){
