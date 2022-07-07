@@ -1,5 +1,6 @@
 import { Serie } from "./serieClass.js";
-import {generarToken} from "./token.js"
+import {generarToken} from "./token.js";
+import {validarGenero, validarTextos, validarURL} from "./validaciones.js"
 
 // traemos los elementos del html
 let codigo = document.querySelector("#codigo");
@@ -11,13 +12,17 @@ let formulario = document.querySelector("#formSerie");
 let btnCrearSerie = document.querySelector("#btnCrearSerie");
 let token = [];
 
+// agregamos las validaciones
+titulo.addEventListener('blur',()=>{validarTextos(titulo,2,30)});
+descripcion.addEventListener('blur',()=>{validarTextos(descripcion,10,200)});
+imagen.addEventListener('blur',()=>{validarURL(imagen)});
+genero.addEventListener('change',()=>{validarGenero(genero)});
+
+
 const modalAdminSerie = new bootstrap.Modal(document.querySelector('#modalSerie'));
-console.log(modalAdminSerie);
 
 // si hay algo en local storage traer los datos, si no hay nada listaSeries tiene que ser una []
 let listasSeries = JSON.parse(localStorage.getItem('listaSeriesKey')) || []; //con JSON.parse el formato legible para js
-
-// agregar validaciones a cada campo
 
 formulario.addEventListener('submit',crearSerie);
 btnCrearSerie.addEventListener('click', ()=>{
@@ -39,25 +44,43 @@ cargaInicial();
 function crearSerie(e){
     e.preventDefault();
     console.log("Desde crear serie");
+    
     // volver a validar y si son correctos crear la nueva serie
-    let nuevaSerie = new Serie (codigo.value,titulo.value,descripcion.value,imagen.value,genero.value);
-    console.log(nuevaSerie);
-    // agregamos una serie al final del arreglo
-    listasSeries.push(nuevaSerie);
-    console.log(listasSeries);
-    // limpiar el formulario
-    limpiarFormulario();
-    // guardar la lista de series en local storage
-    guardarListaSeries();
-    // cerrar modal que administra series
-    modalAdminSerie.hide();
-    // mostrar mensaje
-    Swal.fire(
+    if(validarTextos(titulo,2,30) && validarTextos(descripcion,10,200) && validarURL(imagen) && validarGenero(genero)){
+        let nuevaSerie = new Serie (codigo.value,titulo.value,descripcion.value,imagen.value,genero.value);
+        console.log(nuevaSerie);
+        
+        // agregamos una serie al final del arreglo
+        listasSeries.push(nuevaSerie);
+        console.log(listasSeries);
+        
+        // limpiar el formulario
+        limpiarFormulario();
+        
+        // guardar la lista de series en local storage
+        guardarListaSeries();
+        
+        // cerrar modal que administra series
+        modalAdminSerie.hide();
+        
+        // mostrar mensaje
+        Swal.fire(
         'Serie creada!',
         'La serie cargada se creo correctamente',
         'success'
-    );
-    crearFila(nuevaSerie);
+        );
+        crearFila(nuevaSerie);
+    } else {
+        // cerrar modal que administra series
+        modalAdminSerie.hide();
+        
+        // mostrar mensaje
+        Swal.fire(
+        'Serie no creada!',
+        'La serie cargada no se creo correctamente',
+        'error'
+        );
+    }
 }
 
 function limpiarFormulario(){
