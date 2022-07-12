@@ -1,6 +1,6 @@
 import { Serie } from "./serieClass.js";
-import {generarToken} from "./token.js";
-import {validarGenero, validarTextos, validarURL} from "./validaciones.js"
+import { generarToken } from "./token.js";
+import { validarGenero, validarTextos, validarURL } from "./validaciones.js"
 
 // traemos los elementos del html
 let codigo = document.querySelector("#codigo");
@@ -30,7 +30,7 @@ btnCrearSerie.addEventListener('click', ()=>{
     limpiarFormulario();
     
     // Ponemos el token generado
-    generarToken(token,3);
+    generarToken(token,8);
     codigo.value = token[token.length-1];
     codigo.disabled = true;
     
@@ -40,6 +40,7 @@ btnCrearSerie.addEventListener('click', ()=>{
 
 // verificar si hay datos para dibujar la tabla
 cargaInicial();
+console.log(token);
 
 function crearSerie(e){
     e.preventDefault();
@@ -101,6 +102,7 @@ function cargaInicial(){
         // dibujar la tabla
         listasSeries.forEach((itemSerie)=>{   //con el forEach le ponemos un nombre (aca) y ese representa a cada uno de los elementos del arreglo
             crearFila(itemSerie);
+            token.push(itemSerie.codigo); //cargamos el los tokens en el arreglo
         });
     }
 }

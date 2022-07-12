@@ -1,5 +1,4 @@
 // Codigo que genera token alfanumerico
-let token=[];
 
 // Funcion que genera una cadena alfanumerica
 function  generarCadenaAlfanumerica (num) {
