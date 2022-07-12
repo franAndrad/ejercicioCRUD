@@ -122,8 +122,40 @@ function crearFila(itemSerie){
         <td>${itemSerie.genero}</td>
         <td>
             <button class="btn btn-warning"><i class="bi bi-x-square"></i></button>
-            <button class="btn btn-danger"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-danger" onclick="borrarProducto('${itemSerie.codigo}')"><i class="bi bi-pencil-square"></i></button>
         </td>
     </tr>
     `;
 }
+
+//De esta forma podemos poner funciones del codigo html teninedo js de tipo modulo
+window.borrarProducto = function(codigo){
+    // console.log("desdes borrar producto" + codigo);
+    
+    // Preguntar al usuario si estoy seguro de borrar
+    Swal.fire({
+        title: 'Esta seguro de eliminar la serie?',
+        text: "No puedes revertir este paso, luego de aceptar",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Borrar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Borrar la serie listaSeries y de localStorage
+            
+            // Actualizar tabla
+            
+            // mostrar cartel de operacion
+            Swal.fire(
+                'Serie eliminada!',
+                'La serie seleccionada fue correctamente eliminada',
+                'success'
+            )
+        }
+    })
+    
+}
+
