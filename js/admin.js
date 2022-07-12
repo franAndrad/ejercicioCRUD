@@ -145,8 +145,14 @@ window.borrarProducto = function(codigo){
     }).then((result) => {
         if (result.isConfirmed) {
             // Borrar la serie listaSeries y de localStorage
+            let listaSeriesNueva = listasSeries.filter ((serie)=> {return serie.codigo !== codigo}); //serie.codigo es una propiedad. Filtramos creando un numero arreglo con las series menos la que queremos
+            listasSeries = listaSeriesNueva;
+            guardarListaSeries();
+            console.log(listaSeriesNueva);
             
             // Actualizar tabla
+            borrarTabla();
+            cargaInicial();
             
             // mostrar cartel de operacion
             Swal.fire(
@@ -159,3 +165,7 @@ window.borrarProducto = function(codigo){
     
 }
 
+function borrarTabla(){
+    let tbodySeries = document.getElementById("listaSeries");
+    tbodySeries.innerHTML = ''; //borramos la tabla
+}
