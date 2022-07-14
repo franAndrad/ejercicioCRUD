@@ -12,6 +12,9 @@ let formulario = document.querySelector("#formSerie");
 let btnCrearSerie = document.querySelector("#btnCrearSerie");
 let token = [];
 
+// variable para manejar el create y update
+let serieEditable = false; //si es false la serie es nueva y si es true debe modificar
+
 // agregamos las validaciones
 titulo.addEventListener('blur',()=>{validarTextos(titulo,2,30)});
 descripcion.addEventListener('blur',()=>{validarTextos(descripcion,10,200)});
@@ -24,7 +27,21 @@ const modalAdminSerie = new bootstrap.Modal(document.querySelector('#modalSerie'
 // si hay algo en local storage traer los datos, si no hay nada listaSeries tiene que ser una []
 let listasSeries = JSON.parse(localStorage.getItem('listaSeriesKey')) || []; //con JSON.parse el formato legible para js
 
-formulario.addEventListener('submit',crearSerie);
+formulario.addEventListener('submit',guardarSerie);
+
+function guardarSerie(e){
+    e.preventDefault();
+    if(serieEditable){
+        // aqui se modifica
+        guardarEdicionSerie();
+        
+    } else {
+        // aqui se crea
+        crearSerie();
+    }
+    
+}
+
 btnCrearSerie.addEventListener('click', ()=>{
     // limpiamos el formulario
     limpiarFormulario();
@@ -36,14 +53,16 @@ btnCrearSerie.addEventListener('click', ()=>{
     
     // mostramos la ventana modal
     modalAdminSerie.show();
+    
+    //ponemos la obcion de que sea creable y no editable
+    serieEditable = false; 
 }); //abrimos ventana modal
 
 // verificar si hay datos para dibujar la tabla
 cargaInicial();
 console.log(token);
 
-function crearSerie(e){
-    e.preventDefault();
+function crearSerie(){
     console.log("Desde crear serie");
     
     // volver a validar y si son correctos crear la nueva serie
@@ -121,8 +140,8 @@ function crearFila(itemSerie){
         <td>${itemSerie.imagen}</td>
         <td>${itemSerie.genero}</td>
         <td>
-            <button class="btn btn-warning"><i class="bi bi-x-square"></i></button>
-            <button class="btn btn-danger" onclick="borrarProducto('${itemSerie.codigo}')"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-warning" onclick="prepararEdicionSeries('${itemSerie.codigo}')"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-danger" onclick="borrarProducto('${itemSerie.codigo}')"><i class="bi bi-x-square"></i></button>
         </td>
     </tr>
     `;
@@ -168,4 +187,52 @@ window.borrarProducto = function(codigo){
 function borrarTabla(){
     let tbodySeries = document.getElementById("listaSeries");
     tbodySeries.innerHTML = ''; //borramos la tabla
+}
+
+window.prepararEdicionSeries = function (codigoP){
+    // cargar los datos de la serie a editar
+    let serieBuscada = listasSeries.find((serie)=>{return serie.codigo === codigoP}) //Devuelve el objeto que estoy buscando
+    console.log(serieBuscada);
+    
+    // asignar los valores a cada input
+    codigo.value = serieBuscada.codigo;
+    titulo.value = serieBuscada.titulo;
+    descripcion.value = serieBuscada.descripcion;
+    imagen.value = serieBuscada.imagen;
+    genero.value = serieBuscada.genero;
+    
+    // mostrar el formulario
+    modalAdminSerie.show();
+    
+    // modifico la variable para editar
+    serieEditable = true;
+}
+
+function guardarEdicionSerie(){
+    // nescesitamos la posicion de la serie dentro del arreglo
+    let posicionSerie = listasSeries.findIndex((serie)=>{return serie.codigo === codigo.value})
+    console.log(posicionSerie);
+    
+    // modificamos los valores de la serie encontrada
+    listasSeries[posicionSerie].titulo = titulo.value;
+    listasSeries[posicionSerie].descripcion = descripcion.value;
+    listasSeries[posicionSerie].imagen = imagen.value;
+    listasSeries[posicionSerie].genero = genero.value;
+    
+    // actualizar el localStorage
+    guardarListaSeries();
+    
+    // actualizar la tabla
+    borrarTabla();
+    cargaInicial();
+    
+    // mostrar que la serie fue modificada
+    Swal.fire(
+        'Serie modificada!',
+        'La serie se modifico correctamente',
+        'success'
+        );
+        
+    // cerrar ventana modal
+    modalAdminSerie.hide();
 }
