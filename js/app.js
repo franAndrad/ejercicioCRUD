@@ -1,0 +1,22 @@
+// verificar si hay algo en el localStorage
+let listaSeries = JSON.parse(localStorage.getItem('listaSeriesKey')) || [];
+
+// si hay datos dibujar la cards
+listaSeries.forEach((serie)=>{
+    crearColumna(serie);
+});
+
+function crearColumna(serie){
+    let grillaSerie = document.querySelector("#grillaSerie");
+    grillaSerie.innerHTML += `
+        <article class="col-12 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+            <img src="${serie.imagen}" class="card-img-top" alt="${serie.titulo}">
+        <div class="card-body">
+        <h5 class="card-title">${serie.titulo}</h5>
+        <a href="#" class="btn btn-primary">ver detalle</a>
+        </div>
+    </div>
+    </article>
+    `
+}
