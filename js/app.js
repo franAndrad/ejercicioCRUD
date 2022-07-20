@@ -24,6 +24,6 @@ function crearColumna(serie){
 
 window.verDetalle = (codigo) =>{
     console.log(codigo);
-    console.log(window.location.origin+'/pages/detalle.html');
-    window.location.href = window.location.origin+'/pages/detalle.html';
+    console.log(window.location.origin+`/pages/detalle.html?codigo=${(codigo)}`);  //el location nos muestra la direccion donde esta la pagina y con el ? pasamos parametros
+    window.location.href = window.location.origin+`/pages/detalle.html?codigo=${(codigo)}`;
 }
